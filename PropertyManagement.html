@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Property Management</title>
+	<script src="http://rawgit.com/ethereum/web3.js/0.16.0/dist/web3.min.js"></script>
+	<script
+	  src="https://code.jquery.com/jquery-3.1.1.min.js"
+	  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+	  crossorigin="anonymous"></script>
+	 <script>
+		window.addEventListener('load', function() {
+		  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+		  if (typeof web3 !== 'undefined') {
+		    // Use Mist/MetaMask's provider
+		    web3 = new Web3(web3.currentProvider); 
+		  } else {
+		    console.log('No web3? You should consider trying MetaMask!')
+		    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+		    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+		  }
+      var abi =[{"constant":false,"inputs":[{"name":"street","type":"bytes32"},{"name":"description","type":"string"},{"name":"value","type":"uint256"},{"name":"owner","type":"address"}],"name":"createProperty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"government","outputs":[{"name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"x","type":"bytes32"}],"name":"bytes32ToString","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"newOwner","type":"address"},{"name":"street","type":"bytes32"}],"name":"transferProperty","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"bytes32"}],"name":"properties","outputs":[{"name":"streetID","type":"bytes32"},{"name":"street","type":"string"},{"name":"description","type":"string"},{"name":"value","type":"uint256"},{"name":"owner","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":false,"name":"street","type":"string"},{"indexed":false,"name":"description","type":"string"},{"indexed":false,"name":"value","type":"uint256"},{"indexed":false,"name":"owner","type":"address"}],"name":"Create","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"name":"from","type":"address"},{"indexed":false,"name":"to","type":"address"},{"indexed":false,"name":"street","type":"string"}],"name":"Transfer","type":"event"}];
+      var MyContract = web3.eth.contract(abi);
+      var myContractInstance = MyContract.at('0x55ebf9b60c49a1406e2ade5c41aea63534b41b14');
+		  // Now you can start your app & access web3 freely:
+		  startApp(abi,MyContract,myContractInstance);
+		})
+  </script>
+  </head>
+
+  <body>
+   <div>
+        <h4>
+			Create Property - can only be called from the Government address, failed otherwise. 
+        </h4>
+        <div>
+			Street and number    : <input id='propAddressNew'>
+        </div>
+        <div>
+			Property Description : <input id='propDescription'>
+        </div>
+        <div>
+			Property Value       : <input id='propValue'>
+        </div>
+        <div>
+			Owner                : <input id='propOwner'>
+        </div>
+
+
+		</div>
+			<button onclick='createProperty()'>Create Property</button>
+		</div>
+		<hr/>
+		<p>Events generated for the Property creation:
+			<h3 id='callback'></h3>
+		</p>
+        <hr/>
+		<h4>
+			Transfer property - can be called only by the owner of the property to transfer, failed otherwise.
+		</h4>
+		<div>
+			Receiver Address     : <input id='receiverAdd'>
+        </div>
+        <div>
+			Property to Transfer : <input id='propertyToTransfer'>
+        </div>
+        <button onclick='transferProperty()'>Proceed to Transfer</button>
+      </div>
+	  <hr/>
+		<p>Events generated for the transfer made:
+			<h3 id='callback1'></h3>
+		</p>
+      <hr/>
+      <div>
+		Check Property: <input id='checkProp'>
+	  </div>
+		<button onclick='checkProperty()'>Check Property</button>
+		<p>Property:
+			<h3 id='propertyCallback'></h3>
+		</p>
+		<hr/>
+		<h4>Let's fetch all the events of Properties creation
+		</h4>
+		<div>
+			Address(Enter, if you want to fetch the history of specific property, leave blank otherwise):
+			<input id='AddForFetchinEvents'>
+		</div>
+		<hr/>
+		<button onclick='handleAllCreateEvents()'>Fetch All Events</button>
+		<hr/>
+		<p><h4>Properties created Events:</h4>
+			<h3 id='PropCreatedEvents'></h3>
+		</p>
+<script type="text/javascript" src='property.js'>
+
+</script>
+
+  </body>
+</html>
