@@ -33,7 +33,7 @@ contract propertyManagement {
     // Events allow light clients to react on
     // changes efficiently.
     event Create(string street, string description, uint value, address owner);
-    event Transfer(address from, address to, string street);
+    event Transfer(address from , address to, string street);
     
     mapping (bytes32 => property) public properties;
     

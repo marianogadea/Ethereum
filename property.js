@@ -20,7 +20,15 @@ function createProperty(){
 			console.log(res);
 		}
 	});
-
+        var event = myContractInstance.Create({},function(error, result) {
+		  if (!error) {
+			    var msg = "Property " + result.args.street + " created and assigned to " + result.args.owner;
+			    document.getElementById('callback').innerHTML = ""+msg;
+			    console.log(msg);
+		  } else {
+			  console.error(error);
+		  } 
+	});
 }
 
 function transferProperty(){
@@ -34,7 +42,7 @@ function transferProperty(){
 			console.log(res);
 		}
 	});
- var event = myContractInstance.Transfer({},function(error, result) {
+        var event = myContractInstance.Transfer({},function(error, result) {
 		  if (!error) {
 			    var msg = result.args.street +" transferred from: " + result.args.from + " to: "+ result.args.to;
 			    document.getElementById('callback1').innerHTML = ""+msg;
@@ -49,14 +57,46 @@ function transferProperty(){
 
 function checkProperty(){
 	var checkProp = document.getElementById('checkProp').value;
-	var propertyStatus = myContractInstance.properties(checkProp,function(err,res){
+	var propertyStatus = myContractInstance.properties(checkProp,function(err,result){
 		if(err){
 			console.log(err);
 		} else {
-			document.getElementById('propertyCallback').innerHTML = ""+res;
-			console.log(res);
+			document.getElementById('propertyCallback').innerHTML = ""+result;
+			console.log(result);
 			
 		}
 	});
 }
+
+function handlePropCreationEvent(){
+	var AddForFetchinEvents = document.getElementById('AddForFetchinEvents').value;
+	if(AddForFetchinEvents!=''){	
+   	     console.log(AddForFetchinEvents);
+	     var allEvents = myContractInstance.Create({street:AddForFetchinEvents},{fromBlock: 0, toBlock: 'latest'},function(error, result) {
+			if (!error) {
+				   var msg = result.args.street +" created and assigned to " + result.args.owner ;
+				    document.getElementById('PropCreatedEvents').innerHTML += "<hr/>"+msg;
+				    console.log(msg);
+			  }
+			  else {
+				  console.error(error);
+			  } 
+		}); 
+	} else {
+		console.log("pulling all the events");
+		var allEvents = myContractInstance.Create({},{fromBlock: 0, toBlock: 'latest'},function(error, result) {
+			  if (!error) {
+				  var msg = result.args.street +" created and assigned to " + (result.args.owner) ;
+				    document.getElementById('PropCreatedEvents').innerHTML += "<hr/>"+msg;
+				    console.log(msg);
+			  }
+			  else {
+				  console.error(error);
+			  } 
+		}); 
+	}
+	allEvents.stopWatching();
+	
+}
+
 
