@@ -1,2 +1,2 @@
-This is the contract and web interface for edureka exercise
+Certification project for Blockchain Edureka training
 
