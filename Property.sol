@@ -1,7 +1,8 @@
 pragma solidity ^0.4.0;
 
 contract propertyManagement {
-    
+    // Contract address: 0x99452a12cbfd29d07a633e5172bc27eefa9d14e9
+	    
     function bytes32ToString(bytes32 x) constant returns (string) {
         bytes memory bytesString = new bytes(32);
         uint charCount = 0;
@@ -33,7 +34,7 @@ contract propertyManagement {
     // Events allow light clients to react on
     // changes efficiently.
     event Create(string street, string description, uint value, address owner);
-    event Transfer(address from , address to, string street);
+    event Transfer(address indexed from , address to, string street);
     
     mapping (bytes32 => property) public properties;
     

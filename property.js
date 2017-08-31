@@ -69,34 +69,18 @@ function checkProperty(){
 }
 
 function handlePropCreationEvent(){
-	var AddForFetchinEvents = document.getElementById('AddForFetchinEvents').value;
-	if(AddForFetchinEvents!=''){	
-   	     console.log(AddForFetchinEvents);
-	     var allEvents = myContractInstance.Create({street:AddForFetchinEvents},{fromBlock: 0, toBlock: 'latest'},function(error, result) {
-			if (!error) {
-				   var msg = result.args.street +" created and assigned to " + result.args.owner ;
-				    document.getElementById('PropCreatedEvents').innerHTML += "<hr/>"+msg;
-				    console.log(msg);
-			  }
-			  else {
-				  console.error(error);
-			  } 
-		}); 
-	} else {
-		console.log("pulling all the events");
-		var allEvents = myContractInstance.Create({},{fromBlock: 0, toBlock: 'latest'},function(error, result) {
-			  if (!error) {
-				  var msg = result.args.street +" created and assigned to " + (result.args.owner) ;
-				    document.getElementById('PropCreatedEvents').innerHTML += "<hr/>"+msg;
-				    console.log(msg);
-			  }
-			  else {
-				  console.error(error);
-			  } 
-		}); 
-	}
+	console.log("pulling all the events");
+	var allEvents = myContractInstance.Create({},{fromBlock: 0, toBlock: 'latest'},function(error, result) {
+  	       if (!error) {
+		  var msg = result.args.street +" created and originally assigned to " + (result.args.owner) ;
+		    document.getElementById('PropCreatedEvents').innerHTML += "<hr/>"+msg;
+		  console.log(msg);
+		  }
+		else {
+		  console.error(error);
+		} 
+	});
 	allEvents.stopWatching();
-	
 }
 
 
